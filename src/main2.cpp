@@ -1,0 +1,57 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+
+//----WINDOW_SETTINGS----
+
+
+
+
+//----DECLARATIONS----
+
+
+
+
+
+int main()
+{
+
+    //----GLFW_INITIALIZATION_AND_CONFIGURATION----
+
+
+    //----GLFW_WINDOW_CREATION----
+
+
+    //----GLAD_INITIALIZATION----
+
+    //----SHADERS_PROGRAM_BUILDING_AND_COMPILING----
+
+    //----VERTEX_SHADERS----
+
+    //----FRAGMENT_SHADERS----
+
+    //----SHADERS_LINKING----
+
+    //----VERTEX_DATA_AND_VERTEX_ATTRIBUTES_CONFIGURATION----
+    //FIRST BIND THE VAO, THEN THE BUFFERS AND THEN CONFIGURE THE VERTEX ATTRIBUTES.
+    //ALL THE DATA MUST BE SET BETWEEN THE BIND AND UNBIND.
+    
+
+
+    //----RENDER_LOOP----
+
+        //----INPUT----
+
+        //----RENDERING----
+
+        //----GLFW_BUFFERS_SWAP_AND_POLL_I/O_EVENTS----
+
+
+    //DE-ALLOCATE RESOURCES BEFORE THE MAIN FUNCTION ENDS.
+
+    return 0;
+}
+
+//----FUNCTIONS----
+ 
