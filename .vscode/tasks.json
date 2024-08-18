@@ -11,7 +11,7 @@
                 "-L${workspaceFolder}/lib",
                 "-g",
                 //"${file}",
-                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/main2.cpp",
                 "${workspaceFolder}/src/glad.c",
                 "-lglfw3dll",
                 "-o",
