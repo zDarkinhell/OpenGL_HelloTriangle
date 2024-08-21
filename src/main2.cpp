@@ -1,7 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <shader.h>
 
 #include <iostream>
+#include <cmath>
+
 
 //---EXERCISES----
 /* Try to draw 2 triangles next to each other using glDrawArrays by adding more vertices to your data: solution.
@@ -21,20 +24,25 @@ void processInput(GLFWwindow* window);
 
 const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor2;\n"
 "void main(){\n"
-"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"gl_Position = vec4(aPos, 1.0);\n"
+"ourColor2 = aColor;\n"
 "}\0";
 
 const char *fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 ourColor;\n"
 "void main(){\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"FragColor = ourColor;\n"
 "}\0";
 
 const char *fragmentShaderSourceYellow = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"in vec3 ourColor2;\n"
 "void main(){\n"
-"FragColor = vec4(1.00f, 0.89f, 0.01f, 1.0f);\n"
+"FragColor = vec4(ourColor2, 1.0f);\n"
 "}\0";
 
 /* float vertices[] = 
@@ -51,18 +59,21 @@ int indices[] =
     1, 2, 3
 }; */
 
+//First Triangle
 float vertices[] =
 {
-    -0.3f, 0.0f, 0.0f,
-    -0.2f, 0.3f, 0.0f,
-    -0.1f, 0.0f, 0.0f,
+    //Positions       
+    -0.3f, 0.0f, 0.0f,    
+    -0.2f, 0.3f, 0.0f,    
+    -0.1f, 0.0f, 0.0f,   
 };
-
+//Second Triangle
 float vertices2[] =
 {
-    0.3f, 0.0f, 0.0f,
-    0.2f, 0.3f, 0.0f,
-    0.1f, 0.0f, 0.0f
+    //Positions         //Colors
+    0.3f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+    0.2f, 0.3f, 0.0f,   0.0f, 1.0f, 0.0f,
+    0.1f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f
 };
 
 
@@ -170,8 +181,10 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -186,6 +199,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+
+        float timeValue = glfwGetTime();
+        float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
         glBindVertexArray(VAO);
 
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -194,6 +213,7 @@ int main()
         glBindVertexArray(0);
 
         glUseProgram(shaderProgram2);
+
         glBindVertexArray(VAO2);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
