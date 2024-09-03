@@ -237,8 +237,8 @@ int main()
         ourShader.setFloat("yPosition", yValue);
 
         float angle = 0.45f;
-        float sinAngleValue = sin(timeValue) * angle;
-        float cosAngleValue = cos(timeValue) * angle;
+        float sinAngleValue = sin(angle * timeValue);
+        float cosAngleValue = cos(angle * timeValue);
         ourShader.setFloat("sinAngle", sinAngleValue);
         ourShader.setFloat("cosAngle", cosAngleValue);
 
