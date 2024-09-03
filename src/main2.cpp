@@ -19,10 +19,21 @@ unsigned int WIDTH = 800;
 
 
 
-//----DECLARATIONS----
-void framebuffer_size_callback(GLFWwindow* window, int height, int width);
-void processInput(GLFWwindow* window);
+//----FUNCTIONS----
+void framebuffer_size_callback(GLFWwindow* window, int height, int width)
+{
+    glViewport(0, 0, width, height);
+}
 
+void processInput(GLFWwindow* window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
+//----DECLARATIONS----
 const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "layout (location = 1) in vec3 aColor;\n"
@@ -220,7 +231,21 @@ int main()
         ourShader.use();
         //glUseProgram(shaderProgram2);
 
+        float xValue = sin(timeValue) / 2.0f;
+        float yValue = sin(timeValue) / 2.5f;
+        ourShader.setFloat("xPosition", xValue);
+        ourShader.setFloat("yPosition", yValue);
+
+        float angle = 0.45f;
+        float sinAngleValue = sin(timeValue) * angle;
+        float cosAngleValue = cos(timeValue) * angle;
+        ourShader.setFloat("sinAngle", sinAngleValue);
+        ourShader.setFloat("cosAngle", cosAngleValue);
+
+        //ourShader.setFloat("HorizontalOffset", 0.3f);
+
         glBindVertexArray(VAO2);
+        
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -238,19 +263,4 @@ int main()
 
     glfwTerminate();
     return 0;
-}
-
-//----FUNCTIONS----
- 
-void framebuffer_size_callback(GLFWwindow* window, int height, int width)
-{
-    glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow* window)
-{
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
-    }
 }
