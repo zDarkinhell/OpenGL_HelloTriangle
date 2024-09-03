@@ -13,7 +13,6 @@
                 //"${file}",
                 "${workspaceFolder}/src/main2.cpp",
                 "${workspaceFolder}/src/glad.c",
-                "${workspaceFolder}/src/shader.h",
                 "-lglfw3dll",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"

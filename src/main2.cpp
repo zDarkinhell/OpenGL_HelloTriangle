@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-//#include <src/shader.h>
+
+#include "shader.h"
 
 #include <iostream>
 #include <cmath>
@@ -110,7 +111,9 @@ int main()
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
+    //Declaring our Shader variable with the files paths AFTER OPENGL INITIALIZATION, otherwise it wont work!
+    Shader ourShader("shader.vs", "shader.fs");
+    
     //----VERTEX_SHADERS----
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -205,14 +208,17 @@ int main()
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 1.0f, greenValue, 0.3f, 1.0f);
 
+        std::cout << timeValue << "\n";
+
         glBindVertexArray(VAO);
 
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glBindVertexArray(0);
-
-        glUseProgram(shaderProgram2);
+        //Using our Shader Class shader
+        ourShader.use();
+        //glUseProgram(shaderProgram2);
 
         glBindVertexArray(VAO2);
 
