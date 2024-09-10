@@ -20,11 +20,11 @@ void main()
     //gl_Position = vec4(aPos.x + xPosition, aPos.y + yPosition, aPos.z, 1.0);
 
     //Rotation around the Y axis
-    gl_Position = vec4((cosAngle * aPos.x) + (sinAngle * aPos.z), aPos.y,(-sinAngle * aPos.x) + (cosAngle * aPos.z), 1.0f);
+    //gl_Position = vec4((cosAngle * aPos.x) + (sinAngle * aPos.z), aPos.y,(-sinAngle * aPos.x) + (cosAngle * aPos.z), 1.0f);
     //Rotation around the X axis
     //gl_Position = vec4(aPos.x, (cosAngle * aPos.y) - (sinAngle * aPos.z), (sinAngle * aPos.y) + (cosAngle * aPos.z), 1.0f);
     //Rotation around the Z axis
-    //gl_Position = vec4((cosAngle * aPos.x) - (sinAngle * aPos.y), (sinAngle * aPos.x) + (cosAngle * aPos.y), aPos.z, 1.0f);
+    gl_Position = vec4((cosAngle * aPos.x) - (sinAngle * aPos.y), (sinAngle * aPos.x) + (cosAngle * aPos.y), aPos.z, 1.0f);
     ourColor2 = aColor;
     //aPos2 = aPos;
 
