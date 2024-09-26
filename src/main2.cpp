@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "stb_image.h"
 
 
 //---EXERCISES----
@@ -82,11 +83,18 @@ float vertices[] =
 //Second Triangle
 float vertices2[] =
 {
-    //Positions         //Colors
-    0.3f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
-    0.2f, 0.3f, 0.0f,   0.0f, 1.0f, 0.0f,
-    0.1f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f
+    //Positions         //Colors           //Texture
+    0.3f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+    0.2f, 0.3f, 0.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+    0.1f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
 };
+//Texture cordinates
+/* float texCoords[] =
+{
+    0.0f, 0.0f,  
+    1.0f, 0.0f,  
+    0.5f, 1.0f   
+}; */
 
 
 
@@ -121,6 +129,39 @@ int main()
     glViewport(0, 0, WIDTH, HEIGHT);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    //----CREATING_AND_LOADING_TEXTURES----
+
+    //We're generating the texture and binding it
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    //Setting up the texture wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //Setting up the texture filtering and mipmaps
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    //Using the stb_image library to load and read texture's data
+    int tWidth, tHeigth, nrChannels;
+    unsigned char *data = stbi_load("C:/Users/ricky/Desktop/Projects/OpenGL_HelloTriangle/src/textures/container.jpg", &tWidth, &tHeigth, &nrChannels, 0);
+    
+    if (data)
+    {
+        //Using the data we got earlier to generate the texture image and binding it to the object
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tWidth, tHeigth, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    
+    //Its good use to free the data
+    stbi_image_free(data);
+
+
+
 
     //Declaring our Shader variable with the files paths AFTER OPENGL INITIALIZATION, otherwise it wont work!
     Shader ourShader("shader.vs", "shader.fs");
@@ -195,10 +236,12 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -241,6 +284,9 @@ int main()
         float cosAngleValue = cos(angle * timeValue);
         ourShader.setFloat("sinAngle", sinAngleValue);
         ourShader.setFloat("cosAngle", cosAngleValue);
+
+        //Using our texture
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         //ourShader.setFloat("HorizontalOffset", 0.3f);
 
