@@ -21,18 +21,9 @@ unsigned int WIDTH = 800;
 
 
 //----FUNCTIONS----
-void framebuffer_size_callback(GLFWwindow* window, int height, int width)
-{
-    glViewport(0, 0, width, height);
-}
+void framebuffer_size_callback(GLFWwindow* window, int height, int width);
 
-void processInput(GLFWwindow* window)
-{
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
-    }
-}
+void processInput(GLFWwindow* window);
 
 //----DECLARATIONS----
 const char *vertexShaderSource = "#version 330 core\n"
@@ -96,7 +87,7 @@ float vertices2[] =
     0.5f, 1.0f   
 }; */
 
-
+float value = 0.0f;
 
 
 int main()
@@ -289,7 +280,7 @@ int main()
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 1.0f, greenValue, 0.3f, 1.0f);
 
-        std::cout << timeValue << "\n";
+        //std::cout << timeValue << "\n";
 
         glBindVertexArray(VAO);
 
@@ -326,6 +317,23 @@ int main()
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {   
+            value = value + 0.01f;
+            ourShader.setFloat("vAmount", value);
+            std::cout << value << "\n";
+        }
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            value = value - 0.01f;
+            ourShader.setFloat("vAmount", value);
+            std::cout << value << "\n";
+        }
+
+        value = sin(timeValue);
+        ourShader.setFloat("vAmount", value);
+        std::cout << value << "\n";
+
         glBindVertexArray(0);
         //----GLFW_BUFFERS_SWAP_AND_POLL_I/O_EVENTS----
         glfwSwapBuffers(window);
@@ -340,4 +348,17 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int height, int width)
+{
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
 }
